@@ -1,37 +1,113 @@
 <?php
-// Social Casino - Complete Platform
-// Google Ads Compliant
-// Version 1.0
-
 session_start();
 
-// Initialize user session if not exists
-if (!isset($_SESSION['user_id'])) {
-    $_SESSION['user_id'] = 'guest_' . uniqid();
-    $_SESSION['balance'] = 1000; // Starting virtual coins
+// Initialize session balance
+if (!isset($_SESSION['balance'])) {
+    $_SESSION['balance'] = 1000;
 }
 
-$page = isset($_GET['page']) ? $_GET['page'] : 'home';
-$page_title = "Social Casino - 100% Free Gaming Platform";
+// Handle game actions
+$action = $_GET['action'] ?? '';
+$game = $_GET['game'] ?? '';
+
+if ($action == 'spin_slots') {
+    $bet = intval($_POST['bet'] ?? 10);
+    if ($_SESSION['balance'] >= $bet) {
+        $_SESSION['balance'] -= $bet;
+        $symbols = ['🍎', '🍊', '🍋', '🍌', '🍇', '🍓'];
+        $reel1 = $symbols[array_rand($symbols)];
+        $reel2 = $symbols[array_rand($symbols)];
+        $reel3 = $symbols[array_rand($symbols)];
+        
+        $winAmount = 0;
+        if ($reel1 === $reel2 && $reel2 === $reel3) {
+            $winAmount = $bet * 10;
+            $result = "🎉 JACKPOT! You won $winAmount coins!";
+        } elseif ($reel1 === $reel2 || $reel2 === $reel3 || $reel1 === $reel3) {
+            $winAmount = $bet * 3;
+            $result = "✨ Two Match! You won $winAmount coins!";
+        } else {
+            $result = "❌ No match. Better luck next time!";
+        }
+        
+        $_SESSION['balance'] += $winAmount;
+        $_SESSION['slots_result'] = ['result' => $result, 'reels' => [$reel1, $reel2, $reel3], 'win' => $winAmount];
+    }
+}
+
+if ($action == 'roll_dice') {
+    $bet = intval($_POST['bet'] ?? 50);
+    $prediction = $_POST['prediction'] ?? '';
+    
+    if ($_SESSION['balance'] >= $bet && $prediction) {
+        $_SESSION['balance'] -= $bet;
+        $diceValue = rand(1, 6);
+        $isHigh = $diceValue >= 4;
+        $isLow = $diceValue <= 3;
+        
+        $winAmount = 0;
+        if (($prediction === 'high' && $isHigh) || ($prediction === 'low' && $isLow)) {
+            $winAmount = $bet * 2;
+            $result = "🎉 You Won! +$winAmount coins!";
+        } else {
+            $result = "❌ You Lost! Better luck next time!";
+        }
+        
+        $_SESSION['balance'] += $winAmount;
+        $_SESSION['dice_result'] = ['result' => $result, 'value' => $diceValue, 'win' => $winAmount];
+    }
+}
+
+if ($action == 'play_mines') {
+    $bet = intval($_POST['bet'] ?? 10);
+    if ($_SESSION['balance'] >= $bet) {
+        $_SESSION['balance'] -= $bet;
+        $_SESSION['mines_game'] = [
+            'grid' => array_map(function() { return ['mine' => rand(0, 1) < 0.3, 'revealed' => false]; }, range(1, 25)),
+            'safe_count' => 0,
+            'active' => true
+        ];
+    }
+}
+
+if ($action == 'click_mine') {
+    $index = intval($_GET['index'] ?? 0);
+    if (isset($_SESSION['mines_game']) && $_SESSION['mines_game']['active']) {
+        $_SESSION['mines_game']['grid'][$index]['revealed'] = true;
+        if ($_SESSION['mines_game']['grid'][$index]['mine']) {
+            $_SESSION['mines_game']['active'] = false;
+            $_SESSION['mines_result'] = "💣 GAME OVER! You hit a mine!";
+        } else {
+            $_SESSION['mines_game']['safe_count']++;
+            $multiplier = 1 + ($_SESSION['mines_game']['safe_count'] * 0.5);
+            $_SESSION['mines_multiplier'] = $multiplier;
+        }
+    }
+}
+
+if ($action == 'drop_plinko') {
+    $bet = intval($_POST['bet'] ?? 10);
+    if ($_SESSION['balance'] >= $bet) {
+        $_SESSION['balance'] -= $bet;
+        $multipliers = [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 5, 10];
+        $multiplier = $multipliers[array_rand($multipliers)];
+        $winAmount = intval($bet * $multiplier);
+        $_SESSION['balance'] += $winAmount;
+        $_SESSION['plinko_result'] = ['multiplier' => $multiplier, 'win' => $winAmount];
+    }
+}
+
+$page = $_GET['page'] ?? 'home';
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="100% Free Social Casino Platform. Play games with virtual coins. No real money. Entertainment only.">
-    <meta name="keywords" content="free games, social casino, virtual coins, entertainment">
-    <meta name="author" content="Social Casino">
-    <meta property="og:title" content="Social Casino - 100% Free Gaming">
-    <meta property="og:description" content="Play amazing games completely free. Virtual coins only. No real money involved.">
-    <meta property="og:type" content="website">
-    
-    <title><?php echo $page_title; ?></title>
-    
+    <title>Social Casino - 100% Free Gaming Platform</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
     <style>
         * {
             margin: 0;
@@ -40,865 +116,606 @@ $page_title = "Social Casino - 100% Free Gaming Platform";
         }
 
         :root {
-            --primary: #1a1a3e;
-            --secondary: #2d2d5f;
-            --accent: #D4AF37;
-            --success: #00cc00;
-            --danger: #ff4444;
-            --background: #0f0f1e;
-            --text: #ffffff;
-            --text-secondary: #cccccc;
+            --primary: #D4AF37;
+            --primary-dark: #1a1a3e;
+            --primary-light: #f5f5f5;
+            --text-dark: #333333;
+            --text-light: #ffffff;
+            --success: #4CAF50;
+            --danger: #f44336;
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, var(--background) 0%, var(--primary) 100%);
-            color: var(--text);
-            line-height: 1.6;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            background-color: var(--primary-light);
+            color: var(--text-dark);
         }
 
-        /* Header & Navigation */
-        header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: var(--primary-dark);
             padding: 1rem 2rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
             position: sticky;
             top: 0;
             z-index: 1000;
-        }
-
-        .header-content {
-            max-width: 1400px;
-            margin: 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--accent);
+            font-size: 1.8rem;
+            color: var(--primary);
+            font-weight: 800;
             text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo:hover {
-            color: #ffed4e;
-        }
-
-        nav {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
         }
 
         nav a {
-            color: var(--text);
+            color: var(--text-light);
             text-decoration: none;
-            font-size: 14px;
-            transition: color 0.3s;
-            font-weight: 500;
+            margin: 0 1rem;
         }
 
         nav a:hover {
-            color: var(--accent);
-        }
-
-        nav a.active {
-            color: var(--accent);
-            border-bottom: 2px solid var(--accent);
-            padding-bottom: 5px;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 8px 16px;
-            border-radius: 8px;
+            color: var(--primary);
         }
 
         .balance {
-            font-weight: 600;
-            color: var(--accent);
-        }
-
-        /* Main Content */
-        main {
-            flex: 1;
-            max-width: 1400px;
-            margin: 0 auto;
-            width: 100%;
-            padding: 2rem;
+            color: var(--primary);
+            font-weight: bold;
         }
 
         .container {
-            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
         }
 
-        /* Page Sections */
-        .page-section {
-            display: none;
-        }
-
-        .page-section.active {
-            display: block;
-            animation: fadeIn 0.3s ease-in;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        /* Home Page */
+        /* Hero */
         .hero {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, #2d2d5f 100%);
+            color: var(--text-light);
+            padding: 4rem 2rem;
             text-align: center;
-            margin-bottom: 3rem;
         }
 
         .hero h1 {
-            font-family: 'Playfair Display', serif;
             font-size: 3rem;
             margin-bottom: 1rem;
-            color: var(--accent);
-            text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+            color: var(--primary);
         }
 
-        .hero p {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
-            margin-bottom: 2rem;
-        }
-
-        .disclaimer {
-            background: rgba(255, 215, 0, 0.1);
-            border-left: 4px solid var(--accent);
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin-bottom: 2rem;
-        }
-
-        .disclaimer strong {
-            color: var(--accent);
-        }
-
-        /* Games Grid */
         .games-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 2rem;
-            margin-bottom: 3rem;
+            margin: 2rem 0;
         }
 
         .game-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
+            background: white;
+            border-radius: 12px;
             padding: 2rem;
             text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s;
         }
 
         .game-card:hover {
-            transform: translateY(-8px);
-            border-color: var(--accent);
-            box-shadow: 0 12px 40px rgba(212, 175, 55, 0.2);
+            transform: translateY(-5px);
         }
 
         .game-icon {
-            font-size: 60px;
+            font-size: 3rem;
             margin-bottom: 1rem;
-        }
-
-        .game-card h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 24px;
-            margin-bottom: 0.5rem;
-            color: var(--accent);
-        }
-
-        .game-card p {
-            color: var(--text-secondary);
-            font-size: 14px;
-            margin-bottom: 1.5rem;
         }
 
         .btn {
-            display: inline-block;
-            padding: 12px 24px;
-            background: linear-gradient(135deg, var(--accent), #ffed4e);
-            color: var(--primary);
+            background-color: var(--primary);
+            color: var(--text-dark);
             border: none;
-            border-radius: 8px;
-            font-weight: 600;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
             cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-            font-size: 14px;
+            font-weight: 600;
+            transition: background-color 0.3s;
         }
 
         .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.4);
+            background-color: #c9a227;
         }
 
-        .btn:disabled {
-            opacity: 0.5;
+        .game-container {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 1rem;
+        }
+
+        .game-stats {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            background: #f0f0f0;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        /* Slots */
+        .slots-container {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+
+        .reel {
+            width: 80px;
+            height: 120px;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, #2d2d5f 100%);
+            border: 3px solid var(--primary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: var(--text-light);
+        }
+
+        /* Dice */
+        .dice {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, #2d2d5f 100%);
+            border: 3px solid var(--primary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: var(--text-light);
+            margin: 2rem auto;
+        }
+
+        .prediction-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+
+        .prediction-btn {
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            background: #e0e0e0;
+            border: 2px solid transparent;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        /* Mines */
+        .mines-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .mine-tile {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            border: 2px solid #333;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .mine-tile:hover {
+            transform: scale(1.05);
+        }
+
+        .mine-tile.revealed {
+            background: #f0f0f0;
             cursor: not-allowed;
         }
 
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--text);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 215, 0, 0.2);
-            border-color: var(--accent);
-        }
-
-        /* Features Section */
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin: 3rem 0;
-        }
-
-        .feature {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 2rem;
-            border-radius: 12px;
-            border-left: 4px solid var(--accent);
-        }
-
-        .feature h4 {
-            color: var(--accent);
-            margin-bottom: 1rem;
-        }
-
-        .feature p {
-            color: var(--text-secondary);
-            font-size: 14px;
-        }
-
-        /* Legal Pages */
-        .legal-content {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 2rem;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .legal-content h2 {
-            color: var(--accent);
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
-        }
-
-        .legal-content h3 {
-            color: var(--text-secondary);
-            margin-top: 1.5rem;
-            margin-bottom: 0.8rem;
-        }
-
-        .legal-content p {
-            color: var(--text-secondary);
-            margin-bottom: 1rem;
-            line-height: 1.8;
-        }
-
-        .legal-content ul {
-            margin-left: 2rem;
-            margin-bottom: 1rem;
-            color: var(--text-secondary);
-        }
-
-        .legal-content li {
-            margin-bottom: 0.5rem;
-        }
-
-        /* Footer */
-        footer {
-            background: var(--primary);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 2rem;
-            margin-top: auto;
-        }
-
-        .footer-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .footer-section h4 {
-            color: var(--accent);
-            margin-bottom: 1rem;
-        }
-
-        .footer-section a {
-            display: block;
-            color: var(--text-secondary);
-            text-decoration: none;
-            margin-bottom: 0.5rem;
-            transition: color 0.3s;
-        }
-
-        .footer-section a:hover {
-            color: var(--accent);
-        }
-
-        .footer-bottom {
+        .result-message {
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
             text-align: center;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 2rem;
-            color: var(--text-secondary);
-            font-size: 14px;
+            font-weight: bold;
         }
 
-        /* Responsive */
+        .result-message.win {
+            background: #c8e6c9;
+            color: #2e7d32;
+        }
+
+        .result-message.lose {
+            background: #ffcdd2;
+            color: #c62828;
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .controls button {
+            padding: 1rem 2rem;
+            font-size: 1rem;
+        }
+
+        form {
+            margin: 1rem 0;
+        }
+
+        input[type="number"] {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin: 0 0.5rem;
+        }
+
+        footer {
+            background-color: var(--primary-dark);
+            color: var(--text-light);
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        .disclaimer {
+            background: #fff3cd;
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+            margin: 2rem 0;
+            border-radius: 4px;
+        }
+
         @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            nav {
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 1rem;
-            }
-
             .hero h1 {
                 font-size: 2rem;
             }
-
+            nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
             .games-grid {
                 grid-template-columns: 1fr;
             }
-
-            main {
-                padding: 1rem;
+            .game-stats {
+                flex-direction: column;
             }
-        }
-
-        /* Compliance Messages */
-        .compliance-banner {
-            background: rgba(255, 215, 0, 0.15);
-            border: 1px solid var(--accent);
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-
-        .compliance-banner strong {
-            color: var(--accent);
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="header-content">
-            <a href="?page=home" class="logo">🎰 SOCIAL CASINO</a>
-            <nav>
-                <a href="?page=home" class="<?php echo $page === 'home' ? 'active' : ''; ?>">Home</a>
-                <a href="?page=games" class="<?php echo $page === 'games' ? 'active' : ''; ?>">Games</a>
-                <a href="?page=how-it-works" class="<?php echo $page === 'how-it-works' ? 'active' : ''; ?>">How It Works</a>
-                <a href="?page=about" class="<?php echo $page === 'about' ? 'active' : ''; ?>">About</a>
-                <a href="?page=responsible-play" class="<?php echo $page === 'responsible-play' ? 'active' : ''; ?>">Responsible Play</a>
-                <a href="?page=contact" class="<?php echo $page === 'contact' ? 'active' : ''; ?>">Contact</a>
-            </nav>
-            <div class="user-info">
-                <span>Balance: <span class="balance" id="balance"><?php echo $_SESSION['balance']; ?></span> 💰</span>
+    <!-- Navigation -->
+    <nav>
+        <a href="?page=home" class="logo">🎰 SOCIAL CASINO</a>
+        <div>
+            <a href="?page=home">Home</a>
+            <a href="?page=games">Games</a>
+            <a href="?page=slots">Slots</a>
+            <a href="?page=dice">Dice</a>
+            <a href="?page=mines">Mines</a>
+            <a href="?page=plinko">Plinko</a>
+        </div>
+        <span class="balance">Balance: <?php echo $_SESSION['balance']; ?> 🪙</span>
+    </nav>
+
+    <!-- Home Page -->
+    <?php if ($page === 'home'): ?>
+    <div class="hero">
+        <h1>Welcome to Social Casino</h1>
+        <p>100% Free Gaming Platform • Virtual Coins Only • No Real Money</p>
+        <div class="disclaimer">
+            <strong>⚠️ IMPORTANT:</strong> This is a 100% free-to-play entertainment platform. Virtual coins have NO real money value. All games are for entertainment purposes only. Must be 18+ to play.
+        </div>
+    </div>
+
+    <div class="container">
+        <h2 style="text-align: center; margin: 2rem 0; color: var(--primary);">Featured Games</h2>
+        <div class="games-grid">
+            <div class="game-card">
+                <div class="game-icon">🎰</div>
+                <h3>Slots</h3>
+                <p>Spin the reels and win big!</p>
+                <a href="?page=slots" class="btn">Play Now</a>
+            </div>
+            <div class="game-card">
+                <div class="game-icon">🎲</div>
+                <h3>Dice</h3>
+                <p>Predict the outcome!</p>
+                <a href="?page=dice" class="btn">Play Now</a>
+            </div>
+            <div class="game-card">
+                <div class="game-icon">💣</div>
+                <h3>Mines</h3>
+                <p>Avoid the mines!</p>
+                <a href="?page=mines" class="btn">Play Now</a>
+            </div>
+            <div class="game-card">
+                <div class="game-icon">⚪</div>
+                <h3>Plinko</h3>
+                <p>Drop and win!</p>
+                <a href="?page=plinko" class="btn">Play Now</a>
             </div>
         </div>
-    </header>
+    </div>
+    <?php endif; ?>
 
-    <!-- Main Content -->
-    <main>
-        <!-- Home Page -->
-        <div class="page-section <?php echo $page === 'home' ? 'active' : ''; ?>">
-            <div class="hero">
-                <h1>Welcome to Social Casino</h1>
-                <p>100% Free Gaming Platform • Virtual Coins Only • No Real Money</p>
+    <!-- Games List -->
+    <?php if ($page === 'games'): ?>
+    <div class="container">
+        <h1 style="color: var(--primary); margin: 2rem 0;">Our Games</h1>
+        <div class="games-grid">
+            <div class="game-card">
+                <div class="game-icon">🎰</div>
+                <h3>Premium Slots</h3>
+                <p>Experience the excitement of classic slot machines.</p>
+                <a href="?page=slots" class="btn">Play Now</a>
             </div>
-
-            <div class="compliance-banner">
-                <strong>⚠️ IMPORTANT:</strong> This is a 100% free-to-play entertainment platform. Virtual coins have NO real money value. All games are for entertainment purposes only. Must be 18+ to play.
+            <div class="game-card">
+                <div class="game-icon">🎲</div>
+                <h3>Dice Game</h3>
+                <p>Predict the dice outcome. High/Low or specific numbers.</p>
+                <a href="?page=dice" class="btn">Play Now</a>
             </div>
-
-            <div class="disclaimer">
-                <strong>✓ 100% Free:</strong> Play all games completely free. No payments required ever.<br>
-                <strong>✓ Virtual Coins Only:</strong> All coins are virtual and have zero monetary value.<br>
-                <strong>✓ Entertainment Focus:</strong> Games are designed for fun and entertainment only.<br>
-                <strong>✓ Fair & Safe:</strong> All games use certified random number generators.
+            <div class="game-card">
+                <div class="game-icon">💣</div>
+                <h3>Mines Game</h3>
+                <p>Click safe tiles and avoid mines. Build your multiplier!</p>
+                <a href="?page=mines" class="btn">Play Now</a>
             </div>
-
-            <h2 style="color: var(--accent); margin-bottom: 2rem;">Featured Games</h2>
-
-            <div class="games-grid">
-                <div class="game-card" onclick="goToGame('chicken')">
-                    <div class="game-icon">🐔</div>
-                    <h3>Chicken Game</h3>
-                    <p>Find eggs and avoid bones. Multiplier increases with each safe click!</p>
-                    <button class="btn">Play Now</button>
-                </div>
-
-                <div class="game-card" onclick="goToGame('dice')">
-                    <div class="game-icon">🎲</div>
-                    <h3>Dice Game</h3>
-                    <p>Predict the dice outcome. High/Low or specific numbers.</p>
-                    <button class="btn">Play Now</button>
-                </div>
-
-                <div class="game-card" onclick="goToGame('mines')">
-                    <div class="game-icon">💣</div>
-                    <h3>Mines Game</h3>
-                    <p>Click safe tiles and avoid mines. Build your multiplier!</p>
-                    <button class="btn">Play Now</button>
-                </div>
-
-                <div class="game-card" onclick="goToGame('plinko')">
-                    <div class="game-icon">⚪</div>
-                    <h3>Plinko Game</h3>
-                    <p>Drop balls and watch them fall. Land on high multipliers!</p>
-                    <button class="btn">Play Now</button>
-                </div>
-            </div>
-
-            <h2 style="color: var(--accent); margin: 3rem 0 2rem;">Why Choose Us?</h2>
-
-            <div class="features">
-                <div class="feature">
-                    <h4>💯 100% Free</h4>
-                    <p>No payments, no subscriptions, no hidden fees. Play forever for free.</p>
-                </div>
-                <div class="feature">
-                    <h4>🎮 4 Amazing Games</h4>
-                    <p>Variety of games with different mechanics and strategies.</p>
-                </div>
-                <div class="feature">
-                    <h4>⚡ Fast & Smooth</h4>
-                    <p>Instant gameplay with no lag or delays.</p>
-                </div>
-                <div class="feature">
-                    <h4>🔒 Safe & Secure</h4>
-                    <p>Your data is protected. No real money transactions.</p>
-                </div>
-                <div class="feature">
-                    <h4>📱 Mobile Friendly</h4>
-                    <p>Play on any device - desktop, tablet, or mobile.</p>
-                </div>
-                <div class="feature">
-                    <h4>🎯 Fair Games</h4>
-                    <p>All games use certified random number generators.</p>
-                </div>
+            <div class="game-card">
+                <div class="game-icon">⚪</div>
+                <h3>Plinko Game</h3>
+                <p>Drop balls and watch them fall. Land on high multipliers!</p>
+                <a href="?page=plinko" class="btn">Play Now</a>
             </div>
         </div>
+    </div>
+    <?php endif; ?>
 
-        <!-- Games Page -->
-        <div class="page-section <?php echo $page === 'games' ? 'active' : ''; ?>">
-            <h1 style="color: var(--accent); margin-bottom: 2rem;">All Games</h1>
+    <!-- Slots Game -->
+    <?php if ($page === 'slots'): ?>
+    <div class="container">
+        <div class="game-container">
+            <div class="game-header">
+                <h2>🎰 Slots Game</h2>
+                <a href="?page=home" class="btn">Back to Home</a>
+            </div>
 
-            <div class="games-grid">
-                <div class="game-card" onclick="goToGame('chicken')">
-                    <div class="game-icon">🐔</div>
-                    <h3>Chicken Game</h3>
-                    <p>Find eggs and avoid bones. Multiplier increases with each safe click!</p>
-                    <button class="btn">Play Now</button>
+            <div class="game-stats">
+                <div class="stat">
+                    <div class="stat-label">Your Balance</div>
+                    <div class="stat-value"><?php echo $_SESSION['balance']; ?></div>
                 </div>
-
-                <div class="game-card" onclick="goToGame('dice')">
-                    <div class="game-icon">🎲</div>
-                    <h3>Dice Game</h3>
-                    <p>Predict the dice outcome. High/Low or specific numbers.</p>
-                    <button class="btn">Play Now</button>
+                <div class="stat">
+                    <div class="stat-label">Current Bet</div>
+                    <div class="stat-value"><?php echo $_SESSION['slots_result']['win'] ?? 0; ?></div>
                 </div>
-
-                <div class="game-card" onclick="goToGame('mines')">
-                    <div class="game-icon">💣</div>
-                    <h3>Mines Game</h3>
-                    <p>Click safe tiles and avoid mines. Build your multiplier!</p>
-                    <button class="btn">Play Now</button>
-                </div>
-
-                <div class="game-card" onclick="goToGame('plinko')">
-                    <div class="game-icon">⚪</div>
-                    <h3>Plinko Game</h3>
-                    <p>Drop balls and watch them fall. Land on high multipliers!</p>
-                    <button class="btn">Play Now</button>
+                <div class="stat">
+                    <div class="stat-label">Multiplier</div>
+                    <div class="stat-value">1.00x - 10.00x</div>
                 </div>
             </div>
-        </div>
 
-        <!-- How It Works -->
-        <div class="page-section <?php echo $page === 'how-it-works' ? 'active' : ''; ?>">
-            <h1 style="color: var(--accent); margin-bottom: 2rem;">How It Works</h1>
+            <form method="POST" action="?action=spin_slots&game=slots">
+                <div style="text-align: center;">
+                    <label>Bet Amount: <input type="number" name="bet" value="10" min="1" max="1000"></label>
+                    <button type="submit" class="btn">SPIN</button>
+                    <a href="?page=slots" class="btn">Reset</a>
+                </div>
+            </form>
 
-            <div class="legal-content">
-                <h2>Getting Started</h2>
-                <p>Social Casino is designed to be simple and fun. Here's how to get started:</p>
-
-                <h3>Step 1: Start Playing</h3>
-                <p>No registration required! You get 1,000 virtual coins to start playing immediately.</p>
-
-                <h3>Step 2: Choose a Game</h3>
-                <p>Select from our 4 amazing games: Chicken, Dice, Mines, or Plinko. Each game has unique mechanics and strategies.</p>
-
-                <h3>Step 3: Place Your Bet</h3>
-                <p>Decide how many coins you want to bet. You can adjust your bet amount before each game.</p>
-
-                <h3>Step 4: Play & Win</h3>
-                <p>Follow the game rules and try to win! Your balance updates in real-time.</p>
-
-                <h3>Step 5: Keep Playing</h3>
-                <p>Win or lose, you can keep playing forever. Your coins reset daily so you always have coins to play with.</p>
-
-                <h2>Game Rules</h2>
-                
-                <h3>🐔 Chicken Game</h3>
-                <p>Click on tiles to find eggs and avoid bones. Each egg found increases your multiplier. Hit a bone and the game ends. Cash out anytime to secure your winnings!</p>
-
-                <h3>🎲 Dice Game</h3>
-                <p>Predict whether the dice will roll High (4-6) or Low (1-3). You can also predict specific numbers. Correct predictions win you coins based on the odds.</p>
-
-                <h3>💣 Mines Game</h3>
-                <p>Click on safe tiles while avoiding hidden mines. Each safe click increases your multiplier. The more you click, the higher the risk but greater the rewards!</p>
-
-                <h3>⚪ Plinko Game</h3>
-                <p>Drop a ball from the top and watch it bounce down through pegs. It lands in a slot at the bottom with a multiplier. Higher multipliers are riskier!</p>
-
-                <h2>Responsible Gaming</h2>
-                <p>Remember: These are games of chance. Play for entertainment only. Set limits on how much time and virtual coins you spend. If you feel gaming is affecting your well-being, please seek help.</p>
+            <div class="slots-container">
+                <div class="reel"><?php echo $_SESSION['slots_result']['reels'][0] ?? '🍎'; ?></div>
+                <div class="reel"><?php echo $_SESSION['slots_result']['reels'][1] ?? '🍎'; ?></div>
+                <div class="reel"><?php echo $_SESSION['slots_result']['reels'][2] ?? '🍎'; ?></div>
             </div>
-        </div>
 
-        <!-- About Page -->
-        <div class="page-section <?php echo $page === 'about' ? 'active' : ''; ?>">
-            <h1 style="color: var(--accent); margin-bottom: 2rem;">About Social Casino</h1>
-
-            <div class="legal-content">
-                <h2>Our Mission</h2>
-                <p>Social Casino is dedicated to providing a fun, safe, and completely free gaming platform where players can enjoy games of chance for entertainment purposes only.</p>
-
-                <h2>What We Stand For</h2>
-                <ul>
-                    <li><strong>100% Free:</strong> No payments, no subscriptions, no hidden costs.</li>
-                    <li><strong>Fair Play:</strong> All games use certified random number generators.</li>
-                    <li><strong>Transparency:</strong> Clear rules and payouts for every game.</li>
-                    <li><strong>Security:</strong> Your data is protected with industry-standard encryption.</li>
-                    <li><strong>Responsibility:</strong> We promote responsible gaming practices.</li>
-                </ul>
-
-                <h2>Company Information</h2>
-                <p><strong>Company Name:</strong> Social Casino Platform</p>
-                <p><strong>Email:</strong> support@socialcasino.com</p>
-                <p><strong>Address:</strong> Gaming Division, Entertainment Hub</p>
-                <p><strong>Registration:</strong> Registered as an entertainment platform</p>
-
-                <h2>Our Commitment</h2>
-                <p>We are committed to providing the best gaming experience while maintaining the highest standards of safety, fairness, and responsible gaming. All our games are regularly audited to ensure fairness.</p>
-
-                <h2>Contact Us</h2>
-                <p>Have questions? We're here to help! Email us at support@socialcasino.com or use our contact form.</p>
+            <?php if (isset($_SESSION['slots_result'])): ?>
+            <div class="result-message <?php echo $_SESSION['slots_result']['win'] > 0 ? 'win' : 'lose'; ?>">
+                <?php echo $_SESSION['slots_result']['result']; ?>
             </div>
+            <?php endif; ?>
         </div>
+    </div>
+    <?php endif; ?>
 
-        <!-- Responsible Play -->
-        <div class="page-section <?php echo $page === 'responsible-play' ? 'active' : ''; ?>">
-            <h1 style="color: var(--accent); margin-bottom: 2rem;">Responsible Play</h1>
-
-            <div class="legal-content">
-                <h2>Play Responsibly</h2>
-                <p>While Social Casino is designed purely for entertainment, we encourage all players to game responsibly.</p>
-
-                <h2>Important Reminders</h2>
-                <ul>
-                    <li>Games are for entertainment only - never play with real money</li>
-                    <li>Virtual coins have no real-world value</li>
-                    <li>Set time limits for your gaming sessions</li>
-                    <li>Never chase losses</li>
-                    <li>Take regular breaks</li>
-                    <li>Only play with virtual coins provided</li>
-                </ul>
-
-                <h2>Signs of Problem Gaming</h2>
-                <p>If you experience any of the following, please seek help:</p>
-                <ul>
-                    <li>Spending excessive time gaming</li>
-                    <li>Thinking about games constantly</li>
-                    <li>Neglecting work, school, or relationships due to gaming</li>
-                    <li>Feeling anxious or irritable when not gaming</li>
-                    <li>Lying about gaming habits</li>
-                </ul>
-
-                <h2>Resources & Support</h2>
-                <p>If you need help, please reach out to:</p>
-                <ul>
-                    <li><strong>National Council on Problem Gambling:</strong> 1-800-522-4700</li>
-                    <li><strong>Gamblers Anonymous:</strong> www.gamblersanonymous.org</li>
-                    <li><strong>NCPG National Problem Gambling Helpline:</strong> 1-800-GAMBLER</li>
-                </ul>
-
-                <h2>Age Restriction</h2>
-                <p><strong>IMPORTANT:</strong> This platform is restricted to users 18 years of age and older. If you are under 18, you must not use this platform.</p>
-
-                <h2>Contact Support</h2>
-                <p>If you have concerns about your gaming habits or need support, please contact us at support@socialcasino.com</p>
+    <!-- Dice Game -->
+    <?php if ($page === 'dice'): ?>
+    <div class="container">
+        <div class="game-container">
+            <div class="game-header">
+                <h2>🎲 Dice Game</h2>
+                <a href="?page=home" class="btn">Back to Home</a>
             </div>
-        </div>
 
-        <!-- Contact Page -->
-        <div class="page-section <?php echo $page === 'contact' ? 'active' : ''; ?>">
-            <h1 style="color: var(--accent); margin-bottom: 2rem;">Contact Us</h1>
+            <div class="game-stats">
+                <div class="stat">
+                    <div class="stat-label">Your Balance</div>
+                    <div class="stat-value"><?php echo $_SESSION['balance']; ?></div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Multiplier</div>
+                    <div class="stat-value">2.00x</div>
+                </div>
+            </div>
 
-            <div class="legal-content">
-                <h2>Get in Touch</h2>
-                <p>Have questions or feedback? We'd love to hear from you!</p>
+            <form method="POST" action="?action=roll_dice&game=dice">
+                <div style="text-align: center;">
+                    <label>Bet Amount: <input type="number" name="bet" value="50" min="1" max="1000"></label>
+                </div>
 
-                <h2>Contact Information</h2>
-                <p><strong>Email:</strong> support@socialcasino.com</p>
-                <p><strong>Response Time:</strong> We typically respond within 24 hours</p>
-
-                <h2>Contact Form</h2>
-                <form style="margin-top: 2rem;">
-                    <div style="margin-bottom: 1.5rem;">
-                        <label style="display: block; margin-bottom: 0.5rem; color: var(--accent);">Name:</label>
-                        <input type="text" placeholder="Your name" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; color: white;">
+                <div style="text-align: center; margin: 2rem 0;">
+                    <p style="font-size: 1.2rem; margin-bottom: 1rem;">Make your prediction:</p>
+                    <div class="prediction-buttons">
+                        <button type="submit" name="prediction" value="high" class="prediction-btn">HIGH (4-6)</button>
+                        <button type="submit" name="prediction" value="low" class="prediction-btn">LOW (1-3)</button>
                     </div>
-                    <div style="margin-bottom: 1.5rem;">
-                        <label style="display: block; margin-bottom: 0.5rem; color: var(--accent);">Email:</label>
-                        <input type="email" placeholder="Your email" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; color: white;">
-                    </div>
-                    <div style="margin-bottom: 1.5rem;">
-                        <label style="display: block; margin-bottom: 0.5rem; color: var(--accent);">Message:</label>
-                        <textarea placeholder="Your message" rows="6" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; color: white; font-family: inherit;"></textarea>
-                    </div>
-                    <button type="submit" class="btn">Send Message</button>
-                </form>
-
-                <h2 style="margin-top: 3rem;">Frequently Asked Questions</h2>
-                
-                <h3>Is this platform really free?</h3>
-                <p>Yes! Completely free. No payments required ever. You start with 1,000 virtual coins.</p>
-
-                <h3>Can I win real money?</h3>
-                <p>No. This is an entertainment platform only. Virtual coins have no real-world value.</p>
-
-                <h3>What happens if I run out of coins?</h3>
-                <p>Your coins reset daily so you always have coins to play with.</p>
-
-                <h3>Is the platform safe?</h3>
-                <p>Yes. We use industry-standard security and all games are fair and certified.</p>
-
-                <h3>Do I need to create an account?</h3>
-                <p>No! You can start playing immediately without registration.</p>
-            </div>
-        </div>
-
-        <!-- Terms & Conditions -->
-        <div class="page-section <?php echo $page === 'terms' ? 'active' : ''; ?>">
-            <h1 style="color: var(--accent); margin-bottom: 2rem;">Terms & Conditions</h1>
-
-            <div class="legal-content">
-                <h2>Terms & Conditions</h2>
-                <p><strong>Last Updated:</strong> January 2026</p>
-
-                <h2>1. Acceptance of Terms</h2>
-                <p>By accessing and using Social Casino, you accept and agree to be bound by the terms and provision of this agreement.</p>
-
-                <h2>2. Virtual Coins</h2>
-                <p>All coins are virtual and have NO real monetary value. They cannot be exchanged for real money or goods.</p>
-
-                <h2>3. Age Restriction</h2>
-                <p>You must be 18 years of age or older to use this platform. By using this platform, you confirm that you are 18+.</p>
-
-                <h2>4. Entertainment Only</h2>
-                <p>This platform is for entertainment purposes only. Games are games of chance and outcomes are random.</p>
-
-                <h2>5. No Real Money</h2>
-                <p>This platform does not involve real money, gambling, or financial transactions of any kind.</p>
-
-                <h2>6. Fair Play</h2>
-                <p>All games use certified random number generators to ensure fair and unbiased outcomes.</p>
-
-                <h2>7. User Conduct</h2>
-                <p>Users agree not to:</p>
-                <ul>
-                    <li>Cheat or use exploits</li>
-                    <li>Harass other users</li>
-                    <li>Use automated tools or bots</li>
-                    <li>Violate any laws or regulations</li>
-                </ul>
-
-                <h2>8. Limitation of Liability</h2>
-                <p>Social Casino is provided "as is" without warranties. We are not liable for any damages or losses.</p>
-
-                <h2>9. Changes to Terms</h2>
-                <p>We reserve the right to modify these terms at any time. Changes are effective immediately upon posting.</p>
-
-                <h2>10. Contact</h2>
-                <p>For questions about these terms, contact us at support@socialcasino.com</p>
-            </div>
-        </div>
-
-        <!-- Privacy Policy -->
-        <div class="page-section <?php echo $page === 'privacy' ? 'active' : ''; ?>">
-            <h1 style="color: var(--accent); margin-bottom: 2rem;">Privacy Policy</h1>
-
-            <div class="legal-content">
-                <h2>Privacy Policy</h2>
-                <p><strong>Last Updated:</strong> January 2026</p>
-
-                <h2>1. Information We Collect</h2>
-                <p>We collect minimal information:</p>
-                <ul>
-                    <li>Session ID for gameplay tracking</li>
-                    <li>Game statistics and results</li>
-                    <li>Contact information (if you contact us)</li>
-                </ul>
-
-                <h2>2. How We Use Information</h2>
-                <p>We use information to:</p>
-                <ul>
-                    <li>Provide and improve our services</li>
-                    <li>Track game statistics</li>
-                    <li>Respond to support requests</li>
-                    <li>Ensure fair play</li>
-                </ul>
-
-                <h2>3. Data Security</h2>
-                <p>We implement industry-standard security measures to protect your information.</p>
-
-                <h2>4. No Third-Party Sharing</h2>
-                <p>We do not sell, trade, or share your information with third parties.</p>
-
-                <h2>5. Cookies</h2>
-                <p>We use cookies to maintain your session and track gameplay statistics.</p>
-
-                <h2>6. Your Rights</h2>
-                <p>You have the right to access, modify, or delete your information. Contact us for requests.</p>
-
-                <h2>7. Changes to Privacy Policy</h2>
-                <p>We may update this policy. Changes are effective immediately upon posting.</p>
-
-                <h2>8. Contact</h2>
-                <p>For privacy concerns, contact us at support@socialcasino.com</p>
-            </div>
-        </div>
-
-        <!-- Disclaimer -->
-        <div class="page-section <?php echo $page === 'disclaimer' ? 'active' : ''; ?>">
-            <h1 style="color: var(--accent); margin-bottom: 2rem;">Disclaimer</h1>
-
-            <div class="legal-content">
-                <h2>Important Disclaimer</h2>
-
-                <div style="background: rgba(255, 68, 68, 0.1); border: 2px solid #ff4444; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
-                    <h3 style="color: #ff4444; margin-bottom: 1rem;">⚠️ CRITICAL NOTICE</h3>
-                    <p><strong>This is a 100% FREE entertainment platform. Virtual coins have NO real money value. This is NOT gambling. No real money is involved.</strong></p>
                 </div>
+            </form>
 
-                <h2>1. No Real Money</h2>
-                <p>Social Casino is a free entertainment platform. No real money is involved in any way. All coins are virtual and have zero monetary value.</p>
+            <div class="dice"><?php echo $_SESSION['dice_result']['value'] ?? '🎲'; ?></div>
 
-                <h2>2. Entertainment Only</h2>
-                <p>Games are designed for entertainment purposes only. They are not gambling and do not involve real money or financial transactions.</p>
+            <?php if (isset($_SESSION['dice_result'])): ?>
+            <div class="result-message <?php echo $_SESSION['dice_result']['win'] > 0 ? 'win' : 'lose'; ?>">
+                <?php echo $_SESSION['dice_result']['result']; ?>
+            </div>
+            <?php endif; ?>
 
-                <h2>3. Age Restriction</h2>
-                <p>This platform is restricted to users 18 years of age and older. Users under 18 are strictly prohibited.</p>
-
-                <h2>4. No Warranties</h2>
-                <p>Social Casino is provided "as is" without any warranties. We do not guarantee specific outcomes or results.</p>
-
-                <h2>5. Responsible Gaming</h2>
-                <p>If you experience any signs of problem gaming, please seek help from professional resources.</p>
-
-                <h2>6. Limitation of Liability</h2>
-                <p>Social Casino is not liable for any damages, losses, or consequences arising from the use of this platform.</p>
-
-                <h2>7. Compliance</h2>
-                <p>This platform complies with all applicable laws and regulations regarding entertainment platforms.</p>
-
-                <h2>8. Contact for Concerns</h2>
-                <p>If you have any concerns, contact us at support@socialcasino.com</p>
+            <div class="controls">
+                <a href="?page=dice" class="btn">Reset</a>
             </div>
         </div>
-    </main>
+    </div>
+    <?php endif; ?>
+
+    <!-- Mines Game -->
+    <?php if ($page === 'mines'): ?>
+    <div class="container">
+        <div class="game-container">
+            <div class="game-header">
+                <h2>💣 Mines Game</h2>
+                <a href="?page=home" class="btn">Back to Home</a>
+            </div>
+
+            <div class="game-stats">
+                <div class="stat">
+                    <div class="stat-label">Your Balance</div>
+                    <div class="stat-value"><?php echo $_SESSION['balance']; ?></div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Safe Tiles</div>
+                    <div class="stat-value"><?php echo $_SESSION['mines_game']['safe_count'] ?? 0; ?></div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Multiplier</div>
+                    <div class="stat-value"><?php echo number_format($_SESSION['mines_multiplier'] ?? 1, 2); ?>x</div>
+                </div>
+            </div>
+
+            <form method="POST" action="?action=play_mines&game=mines">
+                <div style="text-align: center;">
+                    <label>Bet Amount: <input type="number" name="bet" value="10" min="1" max="1000"></label>
+                    <button type="submit" class="btn">New Game</button>
+                </div>
+            </form>
+
+            <?php if (isset($_SESSION['mines_game'])): ?>
+            <div class="mines-grid">
+                <?php foreach ($_SESSION['mines_game']['grid'] as $index => $tile): ?>
+                <a href="?action=click_mine&index=<?php echo $index; ?>&page=mines" class="mine-tile <?php echo $tile['revealed'] ? 'revealed' : ''; ?>">
+                    <?php echo $tile['revealed'] ? ($tile['mine'] ? '💣' : '✅') : '?'; ?>
+                </a>
+                <?php endforeach; ?>
+            </div>
+
+            <?php if (isset($_SESSION['mines_result'])): ?>
+            <div class="result-message lose"><?php echo $_SESSION['mines_result']; ?></div>
+            <?php endif; ?>
+            <?php endif; ?>
+
+            <div class="controls">
+                <a href="?page=mines" class="btn">Reset</a>
+            </div>
+        </div>
+    </div>
+    <?php endif; ?>
+
+    <!-- Plinko Game -->
+    <?php if ($page === 'plinko'): ?>
+    <div class="container">
+        <div class="game-container">
+            <div class="game-header">
+                <h2>⚪ Plinko Game</h2>
+                <a href="?page=home" class="btn">Back to Home</a>
+            </div>
+
+            <div class="game-stats">
+                <div class="stat">
+                    <div class="stat-label">Your Balance</div>
+                    <div class="stat-value"><?php echo $_SESSION['balance']; ?></div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Last Multiplier</div>
+                    <div class="stat-value"><?php echo isset($_SESSION['plinko_result']) ? $_SESSION['plinko_result']['multiplier'] . 'x' : '-'; ?></div>
+                </div>
+            </div>
+
+            <form method="POST" action="?action=drop_plinko&game=plinko">
+                <div style="text-align: center;">
+                    <label>Bet Amount: <input type="number" name="bet" value="10" min="1" max="1000"></label>
+                    <button type="submit" class="btn">DROP BALL</button>
+                </div>
+            </form>
+
+            <div style="text-align: center; background: linear-gradient(135deg, var(--primary-dark) 0%, #2d2d5f 100%); border-radius: 12px; padding: 2rem; margin: 2rem 0; color: var(--text-light);">
+                <div style="font-size: 2rem; margin: 1rem 0;">⚪</div>
+                <?php if (isset($_SESSION['plinko_result'])): ?>
+                <div style="font-size: 1.5rem; color: var(--primary);">Multiplier: <?php echo $_SESSION['plinko_result']['multiplier']; ?>x | Win: <?php echo $_SESSION['plinko_result']['win']; ?> coins</div>
+                <?php else: ?>
+                <div style="font-size: 1.5rem; color: var(--primary);">Ready to drop!</div>
+                <?php endif; ?>
+            </div>
+
+            <div class="controls">
+                <a href="?page=plinko" class="btn">Reset</a>
+            </div>
+        </div>
+    </div>
+    <?php endif; ?>
 
     <!-- Footer -->
     <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>Quick Links</h4>
-                <a href="?page=home">Home</a>
-                <a href="?page=games">Games</a>
-                <a href="?page=how-it-works">How It Works</a>
-                <a href="?page=about">About</a>
-            </div>
-            <div class="footer-section">
-                <h4>Legal</h4>
-                <a href="?page=terms">Terms & Conditions</a>
-                <a href="?page=privacy">Privacy Policy</a>
-                <a href="?page=disclaimer">Disclaimer</a>
-                <a href="?page=responsible-play">Responsible Play</a>
-            </div>
-            <div class="footer-section">
-                <h4>Support</h4>
-                <a href="?page=contact">Contact Us</a>
-                <a href="?page=how-it-works">FAQ</a>
-                <a href="?page=responsible-play">Help</a>
-            </div>
-            <div class="footer-section">
-                <h4>About</h4>
-                <a href="?page=about">About Us</a>
-                <a href="?page=responsible-play">Responsible Gaming</a>
-                <p style="margin-top: 1rem; font-size: 12px; color: var(--text-secondary);">100% Free Platform • Virtual Coins Only • No Real Money</p>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p><strong>⚠️ IMPORTANT:</strong> This is a 100% free-to-play entertainment platform. Virtual coins have NO real money value. All games are for entertainment only. Must be 18+ to play.</p>
-            <p style="margin-top: 1rem;">&copy; 2026 Social Casino. All rights reserved. | <a href="?page=terms" style="color: var(--accent);">Terms</a> | <a href="?page=privacy" style="color: var(--accent);">Privacy</a> | <a href="?page=disclaimer" style="color: var(--accent);">Disclaimer</a></p>
-        </div>
+        <p>&copy; 2026 Social Casino. All rights reserved. | 100% Free-to-Play | Virtual Coins Only | No Real Money</p>
+        <p style="font-size: 0.9rem; margin-top: 1rem;">This is an entertainment platform. Must be 18+ to play. Virtual coins have no real-world value.</p>
     </footer>
-
-    <script>
-        function goToGame(game) {
-            window.location.href = game + '.php';
-        }
-
-        // Update active nav link
-        document.addEventListener('DOMContentLoaded', function() {
-            const currentPage = new URLSearchParams(window.location.search).get('page') || 'home';
-            document.querySelectorAll('nav a').forEach(link => {
-                const href = link.getAttribute('href');
-                if (href.includes('page=' + currentPage)) {
-                    link.classList.add('active');
-                }
-            });
-        });
-    </script>
 </body>
 </html>
