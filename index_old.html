@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Casino Games - Play Slots, Roulette & Blackjack | Social Casino</title>
+    <meta name="description" content="Play free casino-style games with virtual coins. 100% free-to-play social casino with no real money. Slots, roulette, blackjack & more. Entertainment only.">
+    <meta name="keywords" content="free casino games, social casino, slots, roulette, blackjack, free-to-play">
+    <meta property="og:title" content="Free Casino Games - Social Casino Platform">
+    <meta property="og:description" content="Play free casino-style games with virtual coins. No real money involved.">
+    <meta property="og:type" content="website">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #D4AF37;
+            --primary-dark: #1a1a3e;
+            --primary-light: #f5f5f5;
+            --text-dark: #333333;
+            --text-light: #ffffff;
+            --border-color: #e0e0e0;
+            --success: #4CAF50;
+            --warning: #ff9800;
+            --danger: #f44336;
+            --radius: 12px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--primary-light);
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        h1 { font-size: 3rem; }
+        h2 { font-size: 2.5rem; }
+        h3 { font-size: 2rem; }
+        h4 { font-size: 1.5rem; }
+
+        /* Navigation */
+        nav {
+            background-color: var(--primary-dark);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--primary-dark);
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .btn-primary:hover {
+            background-color: #e0c547;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--primary);
+            color: var(--primary-dark);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, #2d2d5f 100%);
+            color: var(--text-light);
+            padding: 6rem 2rem;
+            text-align: center;
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 3.5rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .compliance-banner {
+            background-color: rgba(212, 175, 55, 0.15);
+            border: 2px solid var(--primary);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Section */
+        section {
+            padding: 4rem 0;
+        }
+
+        section.alternate {
+            background-color: #f9f9f9;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title h2 {
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .section-title p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        /* Games Grid */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .game-card {
+            background: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            border-color: var(--primary);
+        }
+
+        .game-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, var(--primary-dark), #2d2d5f);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 3rem;
+        }
+
+        .game-content {
+            padding: 1.5rem;
+        }
+
+        .game-content h3 {
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .game-badge {
+            display: inline-block;
+            background-color: var(--primary);
+            color: var(--primary-dark);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .game-content p {
+            color: #666;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .game-content .btn-primary {
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            color: var(--primary-dark);
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: #666;
+            line-height: 1.8;
+        }
+
+        /* How It Works */
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .step {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--radius);
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary);
+            color: var(--primary-dark);
+            border-radius: 50%;
+            line-height: 50px;
+            font-weight: 800;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .step h3 {
+            color: var(--primary-dark);
+            margin-bottom: 1rem;
+        }
+
+        .step p {
+            color: #666;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--primary-dark);
+            color: var(--text-light);
+            padding: 3rem 0 1rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h4 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary);
+        }
+
+        .footer-disclaimer {
+            background-color: rgba(212, 175, 55, 0.1);
+            border-top: 2px solid var(--primary);
+            padding: 1.5rem;
+            margin-top: 2rem;
+            border-radius: var(--radius);
+            font-size: 0.9rem;
+            line-height: 1.8;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        /* Page Content */
+        .page-content {
+            min-height: calc(100vh - 200px);
+            padding: 3rem 0;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, #2d2d5f 100%);
+            color: var(--text-light);
+            padding: 3rem 0;
+            margin-bottom: 3rem;
+        }
+
+        .page-header h1 {
+            color: var(--primary);
+        }
+
+        /* Content Sections */
+        .content-section {
+            margin-bottom: 3rem;
+        }
+
+        .content-section h2 {
+            color: var(--primary-dark);
+            margin-bottom: 1.5rem;
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 1rem;
+        }
+
+        .content-section h3 {
+            color: var(--primary-dark);
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .content-section p {
+            color: #555;
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+
+        .content-section ul, .content-section ol {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+            color: #555;
+        }
+
+        .content-section li {
+            margin-bottom: 0.5rem;
+            line-height: 1.8;
+        }
+
+        .highlight-box {
+            background-color: rgba(212, 175, 55, 0.1);
+            border-left: 4px solid var(--primary);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: var(--radius);
+        }
+
+        .highlight-box strong {
+            color: var(--primary-dark);
+        }
+
+        /* Contact Form */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius);
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.75rem; }
+            h3 { font-size: 1.5rem; }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .hero {
+                padding: 3rem 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .hero-buttons button {
+                width: 100%;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            section {
+                padding: 2rem 0;
+            }
+
+            .games-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-links {
+                display: none;
+            }
+
+            .logo {
+                font-size: 1.3rem;
+            }
+
+            h1 { font-size: 1.5rem; }
+            h2 { font-size: 1.25rem; }
+            h3 { font-size: 1rem; }
+
+            .hero h1 {
+                font-size: 1.5rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+        }
+
+        /* Hidden Page Content */
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo" onclick="showPage('home')">CASINO</a>
+            <ul class="nav-links">
+                <li><a href="#" onclick="showPage('home')">Home</a></li>
+                <li><a href="#" onclick="showPage('games')">Games</a></li>
+                <li><a href="#" onclick="showPage('how-it-works')">How It Works</a></li>
+                <li><a href="#" onclick="showPage('about')">About</a></li>
+                <li><a href="#" onclick="showPage('responsible-play')">Responsible Play</a></li>
+                <li><a href="#" onclick="showPage('contact')">Contact</a></li>
+                <li><button class="btn-primary" onclick="showPage('home')">Play Now</button></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- HOME PAGE -->
+    <div id="home" class="page active">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-container">
+                <h1>Experience Gaming Like Never Before</h1>
+                <p>Play premium casino-style games with virtual coins. 100% free-to-play, no real money involved. Pure entertainment and fun.</p>
+                
+                <div class="compliance-banner">
+                    ✓ FREE-TO-PLAY SOCIAL CASINO | ✓ NO REAL MONEY | ✓ VIRTUAL COINS ONLY | ✓ ENTERTAINMENT ONLY
+                </div>
+
+                <div class="hero-buttons">
+                    <button class="btn-primary" onclick="alert('Play Now feature coming soon!')">Play Now</button>
+                    <button class="btn-secondary" onclick="showPage('how-it-works')">Learn More</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Games Section -->
+        <section>
+            <div class="container">
+                <div class="section-title">
+                    <h2>Premium Casino-Style Games</h2>
+                    <p>Experience the thrill of gameplay with our collection of free-to-play games</p>
+                </div>
+
+                <div class="games-grid">
+                    <div class="game-card">
+                        <div class="game-image">🎰</div>
+                        <div class="game-content">
+                            <span class="game-badge">Free-to-Play</span>
+                            <h3>Premium Slots</h3>
+                            <p>Experience the excitement of classic slot machines with stunning visuals and smooth gameplay.</p>
+                            <button class="btn-primary" onclick="alert('Game launching soon!')">Play Now</button>
+                        </div>
+                    </div>
+
+                    <div class="game-card">
+                        <div class="game-image">🎡</div>
+                        <div class="game-content">
+                            <span class="game-badge">Free-to-Play</span>
+                            <h3>Roulette</h3>
+                            <p>Score higher with our authentic roulette experience. Fair play guaranteed with certified random outcomes.</p>
+                            <button class="btn-primary" onclick="alert('Game launching soon!')">Play Now</button>
+                        </div>
+                    </div>
+
+                    <div class="game-card">
+                        <div class="game-image">🃏</div>
+                        <div class="game-content">
+                            <span class="game-badge">Free-to-Play</span>
+                            <h3>Blackjack</h3>
+                            <p>Challenge yourself with strategic gameplay. Test your skills against the dealer in this classic card game.</p>
+                            <button class="btn-primary" onclick="alert('Game launching soon!')">Play Now</button>
+                        </div>
+                    </div>
+
+                    <div class="game-card">
+                        <div class="game-image">🎯</div>
+                        <div class="game-content">
+                            <span class="game-badge">Free-to-Play</span>
+                            <h3>Lucky Spin</h3>
+                            <p>Spin and win virtual rewards. Achieve higher scores and compete on our leaderboards.</p>
+                            <button class="btn-primary" onclick="alert('Game launching soon!')">Play Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why Play Section -->
+        <section class="alternate">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Why Play Our Platform</h2>
+                    <p>Premium entertainment with complete peace of mind</p>
+                </div>
+
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🔒</div>
+                        <h3>Secure Gaming</h3>
+                        <p>Play with confidence in our safe and secure environment. Enterprise-grade encryption protects your data.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">🎮</div>
+                        <h3>Instant Play</h3>
+                        <p>No downloads required. Start playing instantly in your browser from any device.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">👥</div>
+                        <h3>Community</h3>
+                        <p>Join thousands of players in our thriving gaming community. Share achievements and connect with others.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">⚖️</div>
+                        <h3>Fair Play</h3>
+                        <p>All games use certified random number generators. Every player has equal chances to win.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">💰</div>
+                        <h3>100% Free</h3>
+                        <p>Completely free-to-play with no real money involved. Play for entertainment, not profit.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">🎁</div>
+                        <h3>Daily Bonuses</h3>
+                        <p>Receive free virtual coins daily. More ways to play and enjoy our platform.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section>
+            <div class="container" style="text-align: center; padding: 3rem 0;">
+                <h2>Ready to Play?</h2>
+                <p style="font-size: 1.1rem; margin: 1rem 0 2rem; color: #666;">Join thousands of players enjoying premium entertainment. Start playing now!</p>
+                <button class="btn-primary" style="padding: 1rem 3rem; font-size: 1.1rem;" onclick="alert('Play Now feature coming soon!')">Start Playing Now</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- GAMES PAGE -->
+    <div id="games" class="page">
+        <div class="page-header">
+            <div class="container">
+                <h1>Our Games</h1>
+                <p>Choose from our collection of premium casino-style games</p>
+            </div>
+        </div>
+
+        <div class="page-content">
+            <div class="container">
+                <div class="games-grid">
+                    <div class="game-card">
+                        <div class="game-image">🎰</div>
+                        <div class="game-content">
+                            <span class="game-badge">Free-to-Play</span>
+                            <h3>Premium Slots</h3>
+                            <p>Classic slot machine experience with modern graphics. Score higher and achieve top leaderboard positions.</p>
+                            <p><strong>Game Type:</strong> Slots | <strong>Players:</strong> All Levels</p>
+                            <button class="btn-primary" onclick="alert('Game launching soon!')">Play Now</button>
+                        </div>
+                    </div>
+
+                    <div class="game-card">
+                        <div class="game-image">🎡</div>
+                        <div class="game-content">
+                            <span class="game-badge">Free-to-Play</span>
+                            <h3>Roulette</h3>
+                            <p>Authentic roulette gameplay with fair outcomes. Test your strategy and compete with other players.</p>
+                            <p><strong>Game Type:</strong> Roulette | <strong>Players:</strong> All Levels</p>
+                            <button class="btn-primary" onclick="alert('Game launching soon!')">Play Now</button>
+                        </div>
+                    </div>
+
+                    <div class="game-card">
+                        <div class="game-image">🃏</div>
+                        <div class="game-content">
+                            <span class="game-badge">Free-to-Play</span>
+                            <h3>Blackjack</h3>
+                            <p>Strategic card game where you challenge the dealer. Improve your skills and climb the rankings.</p>
+                            <p><strong>Game Type:</strong> Card Game | <strong>Players:</strong> All Levels</p>
+                            <button class="btn-primary" onclick="alert('Game launching soon!')">Play Now</button>
+                        </div>
+                    </div>
+
+                    <div class="game-card">
+                        <div class="game-image">🎯</div>
+                        <div class="game-content">
+                            <span class="game-badge">Free-to-Play</span>
+                            <h3>Lucky Spin</h3>
+                            <p>Fast-paced spinning action with instant results. Earn virtual rewards and unlock achievements.</p>
+                            <p><strong>Game Type:</strong> Spin Game | <strong>Players:</strong> All Levels</p>
+                            <button class="btn-primary" onclick="alert('Game launching soon!')">Play Now</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="highlight-box" style="margin-top: 3rem;">
+                    <strong>Important:</strong> All games are completely free-to-play with virtual coins only. No real money is involved. Virtual coins have no real-world value and cannot be cashed out or exchanged for real money.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HOW IT WORKS PAGE -->
+    <div id="how-it-works" class="page">
+        <div class="page-header">
+            <div class="container">
+                <h1>How It Works</h1>
+                <p>Getting started is simple. Follow these easy steps.</p>
+            </div>
+        </div>
+
+        <div class="page-content">
+            <div class="container">
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h3>Visit Our Platform</h3>
+                        <p>Access our platform from any device with a web browser. No downloads required.</p>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h3>Create Your Account</h3>
+                        <p>Sign up with your email and create a secure password. Takes less than a minute.</p>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h3>Receive Free Coins</h3>
+                        <p>Get free virtual coins to start playing immediately. New players receive a welcome bonus.</p>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <h3>Choose Your Game</h3>
+                        <p>Browse our collection of casino-style games and pick your favorite.</p>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">5</div>
+                        <h3>Play for Fun</h3>
+                        <p>Enjoy playing games using your virtual coins. Win or lose, it's all for entertainment.</p>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">6</div>
+                        <h3>Earn Daily Bonuses</h3>
+                        <p>Log in daily to earn free coins and special rewards. More ways to play!</p>
+                    </div>
+                </div>
+
+                <div class="content-section" style="margin-top: 3rem;">
+                    <h2>Important Information</h2>
+                    
+                    <div class="highlight-box">
+                        <strong>Virtual Coins:</strong> All games use virtual coins that have ZERO real-world value. Virtual coins cannot be exchanged for real money, withdrawn to a bank account, or converted to any currency.
+                    </div>
+
+                    <h3>What Makes Us Different</h3>
+                    <ul>
+                        <li><strong>100% Free-to-Play:</strong> No real money required or accepted</li>
+                        <li><strong>Entertainment Only:</strong> Games are designed purely for fun and entertainment</li>
+                        <li><strong>No Cash Prizes:</strong> You cannot win real money or cash prizes</li>
+                        <li><strong>No Withdrawals:</strong> Virtual coins cannot be cashed out</li>
+                        <li><strong>Fair Play:</strong> All games use certified random number generators</li>
+                        <li><strong>Secure:</strong> Your data is protected with enterprise-grade encryption</li>
+                    </ul>
+
+                    <h3>Daily Free Coins</h3>
+                    <p>Every day you log in, you receive free virtual coins to play with. This ensures you always have a way to play without spending any real money. You can also earn bonus coins by:</p>
+                    <ul>
+                        <li>Completing daily login streaks</li>
+                        <li>Participating in special events</li>
+                        <li>Achieving milestones and unlocking achievements</li>
+                        <li>Watching promotional videos (optional)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ABOUT PAGE -->
+    <div id="about" class="page">
+        <div class="page-header">
+            <div class="container">
+                <h1>About Us</h1>
+                <p>Discover our mission and commitment to excellence</p>
+            </div>
+        </div>
+
+        <div class="page-content">
+            <div class="container">
+                <div class="content-section">
+                    <h2>Our Mission</h2>
+                    <p>To deliver world-class, free-to-play gaming experiences that bring joy, excitement, and entertainment to players worldwide. We are committed to creating a safe, fair, and inclusive environment where gaming is about fun and community, not financial risk.</p>
+
+                    <h2>Our Vision</h2>
+                    <p>To become the global leader in premium social gaming, recognized for our commitment to player safety, fair play, and innovation. We envision a thriving international community united by shared values of respect, integrity, and entertainment excellence.</p>
+
+                    <h2>Core Values</h2>
+                    <ul>
+                        <li><strong>Excellence:</strong> We strive for the highest quality in everything we do</li>
+                        <li><strong>Integrity:</strong> We operate with complete transparency and honesty</li>
+                        <li><strong>Responsibility:</strong> We promote healthy gaming habits and player well-being</li>
+                        <li><strong>Transparency:</strong> We openly communicate our rules, operations, and practices</li>
+                        <li><strong>Innovation:</strong> We continuously improve our platform based on player feedback</li>
+                        <li><strong>Community:</strong> We foster a respectful, diverse, and inclusive community</li>
+                    </ul>
+
+                    <h2>Why Choose Us</h2>
+                    <ul>
+                        <li><strong>Premium Gaming Experience:</strong> Stunning graphics, smooth gameplay, and immersive sound design</li>
+                        <li><strong>100% Free-to-Play:</strong> No real money involved, zero financial risk</li>
+                        <li><strong>Advanced Security:</strong> Enterprise-grade encryption and multi-layer security protocols</li>
+                        <li><strong>Fair & Certified:</strong> All games use certified random number generators</li>
+                        <li><strong>24/7 Support:</strong> Our dedicated support team is always available to help</li>
+                        <li><strong>Diverse Game Library:</strong> Regular updates with new games and features</li>
+                        <li><strong>Community Features:</strong> Connect with other players and participate in events</li>
+                        <li><strong>Responsible Gaming Tools:</strong> Resources and tools to help you play responsibly</li>
+                    </ul>
+
+                    <h2>Company Information</h2>
+                    <p><strong>Company Name:</strong> CC INNOVATIONS (OPC) PRIVATE LIMITED</p>
+                    <p><strong>CIN:</strong> U78100JH2023OPC021360</p>
+                    <p><strong>GST:</strong> 20AALCC3673P1ZB</p>
+                    <p><strong>Registered Address:</strong> C/O N K SHARMA, SEC 9 TYPE, BT QR NO 463, HEC, Dhurwa, Ranchi - 834004, Jharkhand, India</p>
+                    <p><strong>Support Email:</strong> support@example.com</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- RESPONSIBLE PLAY PAGE -->
+    <div id="responsible-play" class="page">
+        <div class="page-header">
+            <div class="container">
+                <h1>Responsible Play</h1>
+                <p>We're committed to promoting healthy gaming habits</p>
+            </div>
+        </div>
+
+        <div class="page-content">
+            <div class="container">
+                <div class="content-section">
+                    <h2>Our Commitment</h2>
+                    <p>At our platform, we're committed to promoting healthy gaming habits. While our platform is completely free-to-play with no real money involved, we still encourage responsible gaming practices.</p>
+
+                    <div class="highlight-box">
+                        <strong>Important:</strong> Our platform is intended for users 18 years of age or older. We take age restrictions seriously and encourage parents to monitor their children's online activities.
+                    </div>
+
+                    <h2>Play for Entertainment Only</h2>
+                    <p>Our platform is designed purely for entertainment and fun. Games should never be viewed as:</p>
+                    <ul>
+                        <li>A source of income</li>
+                        <li>A way to make money</li>
+                        <li>An investment opportunity</li>
+                        <li>A solution to financial problems</li>
+                    </ul>
+
+                    <h2>Set Time Limits</h2>
+                    <p>We recommend:</p>
+                    <ul>
+                        <li>Setting daily time limits for gaming</li>
+                        <li>Taking regular breaks</li>
+                        <li>Not gaming during work or study hours</li>
+                        <li>Balancing gaming with other activities</li>
+                    </ul>
+
+                    <h2>Recognize Warning Signs</h2>
+                    <p>If you notice any of these signs, it may be time to take a break:</p>
+                    <ul>
+                        <li>Spending more time gaming than intended</li>
+                        <li>Neglecting responsibilities (work, school, family)</li>
+                        <li>Gaming to escape problems or negative emotions</li>
+                        <li>Difficulty controlling gaming time</li>
+                        <li>Lying about gaming habits</li>
+                    </ul>
+
+                    <h2>Support Resources</h2>
+                    <p>If you're concerned about your gaming habits, these organizations offer free support:</p>
+                    <ul>
+                        <li><strong>National Council on Problem Gambling:</strong> 1-800-522-4700</li>
+                        <li><strong>Gamblers Anonymous:</strong> www.gamblersanonymous.org</li>
+                        <li><strong>NCPG Online Chat:</strong> www.ncpgambling.org</li>
+                    </ul>
+
+                    <h2>Contact Us</h2>
+                    <p>If you have concerns or need support, please contact us at: support@example.com</p>
+
+                    <div class="highlight-box">
+                        <strong>Remember:</strong> Our platform is about having fun. If it stops being fun, it's time to take a break.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTACT PAGE -->
+    <div id="contact" class="page">
+        <div class="page-header">
+            <div class="container">
+                <h1>Contact Us</h1>
+                <p>We'd love to hear from you. Get in touch with our support team.</p>
+            </div>
+        </div>
+
+        <div class="page-content">
+            <div class="container">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-bottom: 3rem;">
+                    <div>
+                        <h2>Get In Touch</h2>
+                        <form id="contactForm">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" id="name" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="subject">Subject</label>
+                                <input type="text" id="subject" name="subject" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Message</label>
+                                <textarea id="message" name="message" required></textarea>
+                            </div>
+                            <button type="submit" class="btn-primary" style="width: 100%;">Send Message</button>
+                        </form>
+                    </div>
+
+                    <div>
+                        <h2>Contact Information</h2>
+                        <div style="background: #f9f9f9; padding: 2rem; border-radius: var(--radius); margin-bottom: 2rem;">
+                            <h3 style="color: var(--primary); margin-bottom: 1rem;">Email</h3>
+                            <p><a href="mailto:support@example.com" style="color: var(--primary); text-decoration: none;">support@example.com</a></p>
+
+                            <h3 style="color: var(--primary); margin-top: 1.5rem; margin-bottom: 1rem;">Phone</h3>
+                            <p>+1 (555) 123-4567</p>
+
+                            <h3 style="color: var(--primary); margin-top: 1.5rem; margin-bottom: 1rem;">Address</h3>
+                            <p>C/O N K SHARMA<br>SEC 9 TYPE, BT QR NO 463<br>HEC, Dhurwa<br>Ranchi - 834004, Jharkhand<br>India</p>
+
+                            <h3 style="color: var(--primary); margin-top: 1.5rem; margin-bottom: 1rem;">Business Hours</h3>
+                            <p>Monday - Friday: 9:00 AM - 6:00 PM IST<br>Saturday - Sunday: 10:00 AM - 4:00 PM IST</p>
+                        </div>
+                    </div>
+                </div>
+
+                @media (max-width: 768px) {
+                    display: grid;
+                    grid-template-columns: 1fr;
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#" onclick="showPage('home')">Home</a></li>
+                        <li><a href="#" onclick="showPage('games')">Games</a></li>
+                        <li><a href="#" onclick="showPage('how-it-works')">How It Works</a></li>
+                        <li><a href="#" onclick="showPage('about')">About Us</a></li>
+                        <li><a href="#" onclick="showPage('contact')">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="#" onclick="showPage('terms')">Terms & Conditions</a></li>
+                        <li><a href="#" onclick="showPage('privacy')">Privacy Policy</a></li>
+                        <li><a href="#" onclick="showPage('disclaimer')">Disclaimer</a></li>
+                        <li><a href="#" onclick="showPage('community-rules')">Community Rules</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#" onclick="showPage('responsible-play')">Responsible Play</a></li>
+                        <li><a href="mailto:support@example.com">Email Support</a></li>
+                        <li><a href="#" onclick="showPage('contact')">Contact Us</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <ul>
+                        <li>CC INNOVATIONS (OPC) PRIVATE LIMITED</li>
+                        <li>CIN: U78100JH2023OPC021360</li>
+                        <li>GST: 20AALCC3673P1ZB</li>
+                        <li><a href="mailto:support@example.com">support@example.com</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-disclaimer">
+                <strong>Age & Responsible Gaming Disclaimer:</strong> The content on this site is intended for users who are 18 years of age or older. It operates as a social gaming platform featuring free-to-play experiences available for entertainment and fun. This is a safe environment with no real money involved. No real currency can be used or gained during gameplay. We promote responsible gaming and fair play. All achievements are for entertainment purposes only and do not translate into any real-world financial activities. Enjoy risk-free gaming in our community.
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 Social Casino. All rights reserved. | Operated by CC INNOVATIONS (OPC) PRIVATE LIMITED | CIN: U78100JH2023OPC021360 | GST: 20AALCC3673P1ZB</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function showPage(pageId) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+
+            // Show selected page
+            const selectedPage = document.getElementById(pageId);
+            if (selectedPage) {
+                selectedPage.classList.add('active');
+                window.scrollTo(0, 0);
+            }
+        }
+
+        // Handle contact form submission
+        document.getElementById('contactForm')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for your message! We will get back to you soon.');
+            this.reset();
+        });
+
+        // Prevent default link behavior
+        document.querySelectorAll('a[href="#"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+            });
+        });
+    </script>
+</body>
+</html>

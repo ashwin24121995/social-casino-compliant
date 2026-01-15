@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Casino - 100% Free Gaming Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #1a0a2e 0%, #16213e 100%);
+            color: #f0f0f0;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid #ffd700;
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffd700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        nav {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        nav button {
+            background: transparent;
+            border: none;
+            color: #f0f0f0;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        nav button:hover {
+            background: rgba(255, 215, 0, 0.1);
+            color: #ffd700;
+        }
+
+        .balance {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid #ffd700;
+            color: #ffd700;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: #b0b0b0;
+            margin-bottom: 20px;
+        }
+
+        .compliance-warning {
+            background: rgba(255, 215, 0, 0.1);
+            border: 2px solid #ffd700;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            color: #f0f0f0;
+        }
+
+        .compliance-warning strong {
+            color: #ffd700;
+        }
+
+        /* Games Grid */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .game-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid #ff0000;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.3);
+        }
+
+        .game-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .game-name {
+            font-size: 20px;
+            font-weight: 600;
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+
+        .game-description {
+            font-size: 14px;
+            color: #b0b0b0;
+            margin-bottom: 15px;
+        }
+
+        .free-badge {
+            display: inline-block;
+            background: #ffd700;
+            color: #1a0a2e;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .play-btn {
+            background: #ffd700;
+            color: #1a0a2e;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .play-btn:hover {
+            background: #ffed4e;
+            transform: scale(1.05);
+        }
+
+        /* Game Screen */
+        .game-screen {
+            display: none;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid #ffd700;
+            border-radius: 12px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .game-screen.active {
+            display: block;
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #ffd700;
+        }
+
+        .game-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #ffd700;
+        }
+
+        .back-btn {
+            background: #ffd700;
+            color: #1a0a2e;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: #ffed4e;
+        }
+
+        /* Game Content */
+        .game-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .game-board {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .game-controls {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .control-group {
+            margin-bottom: 20px;
+        }
+
+        .control-label {
+            color: #ffd700;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .control-input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #ffd700;
+            border-radius: 6px;
+            color: #f0f0f0;
+            font-size: 14px;
+        }
+
+        .bet-presets {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .preset-btn {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid #ffd700;
+            color: #ffd700;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .preset-btn:hover {
+            background: #ffd700;
+            color: #1a0a2e;
+        }
+
+        .action-btn {
+            width: 100%;
+            padding: 15px;
+            background: #ffd700;
+            color: #1a0a2e;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 10px;
+        }
+
+        .action-btn:hover {
+            background: #ffed4e;
+            transform: scale(1.02);
+        }
+
+        .action-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Chicken Game Grid */
+        .chicken-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
+
+        .chicken-box {
+            aspect-ratio: 1;
+            background: rgba(255, 215, 0, 0.1);
+            border: 2px solid #ff0000;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .chicken-box:hover:not(.revealed) {
+            background: rgba(255, 215, 0, 0.2);
+            transform: scale(1.05);
+        }
+
+        .chicken-box.revealed {
+            cursor: not-allowed;
+        }
+
+        /* Dice Game */
+        .dice-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 30px 0;
+        }
+
+        .dice {
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: bold;
+            color: #1a0a2e;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .dice.rolling {
+            animation: rollDice 0.6s ease-in-out;
+        }
+
+        @keyframes rollDice {
+            0%, 100% { transform: rotateX(0) rotateY(0); }
+            50% { transform: rotateX(360deg) rotateY(360deg); }
+        }
+
+        .prediction-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .prediction-btn {
+            padding: 15px;
+            background: rgba(255, 215, 0, 0.1);
+            border: 2px solid #ffd700;
+            color: #ffd700;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .prediction-btn:hover {
+            background: #ffd700;
+            color: #1a0a2e;
+        }
+
+        .prediction-btn.selected {
+            background: #ffd700;
+            color: #1a0a2e;
+        }
+
+        /* Stats */
+        .game-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid #ffd700;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .stat-label {
+            color: #b0b0b0;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            color: #ffd700;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .result-message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+
+        .result-message.show {
+            display: block;
+        }
+
+        .result-message.win {
+            background: rgba(0, 208, 132, 0.2);
+            border: 2px solid #00d084;
+            color: #00d084;
+        }
+
+        .result-message.loss {
+            background: rgba(255, 107, 107, 0.2);
+            border: 2px solid #ff6b6b;
+            color: #ff6b6b;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(0, 0, 0, 0.3);
+            border-top: 2px solid #ffd700;
+            padding: 30px 20px;
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+        }
+
+        .footer-section h3 {
+            color: #ffd700;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .footer-section a {
+            display: block;
+            color: #b0b0b0;
+            text-decoration: none;
+            margin-bottom: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: #ffd700;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .game-content {
+                grid-template-columns: 1fr;
+            }
+
+            nav {
+                gap: 10px;
+                font-size: 12px;
+            }
+
+            nav button {
+                padding: 6px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <a href="#" class="logo" onclick="showHome(); return false;">🎰 SOCIAL CASINO</a>
+            <nav>
+                <button onclick="showHome()">Home</button>
+                <button onclick="showGames()">Games</button>
+                <button onclick="showAbout()">About</button>
+                <div class="balance">💰 Balance: <span id="balance">1000</span></div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Home Screen -->
+        <div id="home-screen" class="active">
+            <div class="hero">
+                <h1>Welcome to Social Casino</h1>
+                <p>100% Free Gaming Platform • Virtual Coins Only • No Real Money</p>
+            </div>
+
+            <div class="compliance-warning">
+                <strong>⚠️ IMPORTANT:</strong> This is a 100% free-to-play entertainment platform. Virtual coins have NO real money value. All games are for entertainment purposes only. Must be 18+ to play.
+            </div>
+
+            <div class="games-grid">
+                <div class="game-card" onclick="playChicken()">
+                    <div class="game-icon">🐔</div>
+                    <div class="free-badge">FREE-TO-PLAY</div>
+                    <div class="game-name">Chicken Game</div>
+                    <div class="game-description">Find eggs and avoid bones. Multiplier increases with each safe click!</div>
+                    <button class="play-btn">Play Now</button>
+                </div>
+
+                <div class="game-card" onclick="playDice()">
+                    <div class="game-icon">🎲</div>
+                    <div class="free-badge">FREE-TO-PLAY</div>
+                    <div class="game-name">Dice Game</div>
+                    <div class="game-description">Predict the dice outcome. High/Low prediction. Win 2x your bet!</div>
+                    <button class="play-btn">Play Now</button>
+                </div>
+
+                <div class="game-card" onclick="playMines()">
+                    <div class="game-icon">💣</div>
+                    <div class="free-badge">FREE-TO-PLAY</div>
+                    <div class="game-name">Mines Game</div>
+                    <div class="game-description">Click safe tiles and avoid mines. Build your multiplier!</div>
+                    <button class="play-btn">Play Now</button>
+                </div>
+
+                <div class="game-card" onclick="playPlinko()">
+                    <div class="game-icon">⚪</div>
+                    <div class="free-badge">FREE-TO-PLAY</div>
+                    <div class="game-name">Plinko Game</div>
+                    <div class="game-description">Drop balls and watch them fall. Land on high multipliers!</div>
+                    <button class="play-btn">Play Now</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chicken Game Screen -->
+        <div id="chicken-screen" class="game-screen">
+            <div class="game-header">
+                <div class="game-title">🐔 Chicken Game</div>
+                <button class="back-btn" onclick="showHome()">← Back to Home</button>
+            </div>
+
+            <div class="game-stats">
+                <div class="stat-box">
+                    <div class="stat-label">Current Multiplier</div>
+                    <div class="stat-value" id="chicken-multiplier">1.00x</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Eggs Found</div>
+                    <div class="stat-value" id="chicken-eggs">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Potential Win</div>
+                    <div class="stat-value" id="chicken-win">0</div>
+                </div>
+            </div>
+
+            <div class="game-content">
+                <div class="game-board">
+                    <div class="chicken-grid" id="chicken-grid"></div>
+                </div>
+
+                <div class="game-controls">
+                    <div class="control-group">
+                        <label class="control-label">Bet Amount:</label>
+                        <input type="number" id="chicken-bet" class="control-input" value="50" min="10" max="1000">
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Bet Presets:</label>
+                        <div class="bet-presets">
+                            <button class="preset-btn" onclick="setBet('chicken', 10)">10</button>
+                            <button class="preset-btn" onclick="setBet('chicken', 50)">50</button>
+                            <button class="preset-btn" onclick="setBet('chicken', 100)">100</button>
+                            <button class="preset-btn" onclick="setBet('chicken', 250)">250</button>
+                            <button class="preset-btn" onclick="setBet('chicken', 500)">500</button>
+                            <button class="preset-btn" onclick="setBet('chicken', 1000)">MAX</button>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Difficulty:</label>
+                        <select id="chicken-difficulty" class="control-input">
+                            <option value="easy">Easy (3 bones, 1.5x)</option>
+                            <option value="medium" selected>Medium (5 bones, 2.0x)</option>
+                            <option value="hard">Hard (8 bones, 3.0x)</option>
+                        </select>
+                    </div>
+
+                    <button class="action-btn" onclick="startChicken()">🚀 START GAME</button>
+                    <button class="action-btn" onclick="cashoutChicken()">💰 CASH OUT</button>
+
+                    <div class="result-message" id="chicken-result"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dice Game Screen -->
+        <div id="dice-screen" class="game-screen">
+            <div class="game-header">
+                <div class="game-title">🎲 Dice Game</div>
+                <button class="back-btn" onclick="showHome()">← Back to Home</button>
+            </div>
+
+            <div class="game-stats">
+                <div class="stat-box">
+                    <div class="stat-label">Your Bet</div>
+                    <div class="stat-value" id="dice-bet-display">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Your Balance</div>
+                    <div class="stat-value" id="dice-balance-display">1000</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Multiplier</div>
+                    <div class="stat-value">2.00x</div>
+                </div>
+            </div>
+
+            <div class="game-content">
+                <div class="game-board">
+                    <div style="text-align: center; padding: 40px;">
+                        <div class="dice" id="dice-result">?</div>
+                    </div>
+                </div>
+
+                <div class="game-controls">
+                    <div class="control-group">
+                        <label class="control-label">Make Your Prediction:</label>
+                        <div class="prediction-buttons">
+                            <button class="prediction-btn" onclick="selectPrediction('high')">HIGH (4-6)</button>
+                            <button class="prediction-btn" onclick="selectPrediction('low')">LOW (1-3)</button>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Bet Amount:</label>
+                        <input type="number" id="dice-bet" class="control-input" value="50" min="10" max="1000">
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Bet Presets:</label>
+                        <div class="bet-presets">
+                            <button class="preset-btn" onclick="setBet('dice', 10)">10</button>
+                            <button class="preset-btn" onclick="setBet('dice', 50)">50</button>
+                            <button class="preset-btn" onclick="setBet('dice', 100)">100</button>
+                            <button class="preset-btn" onclick="setBet('dice', 250)">250</button>
+                            <button class="preset-btn" onclick="setBet('dice', 500)">500</button>
+                            <button class="preset-btn" onclick="setBet('dice', 1000)">MAX</button>
+                        </div>
+                    </div>
+
+                    <button class="action-btn" onclick="rollDice()">🎲 ROLL DICE</button>
+
+                    <div class="result-message" id="dice-result-msg"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <a href="#" onclick="showHome(); return false;">Home</a>
+                <a href="#" onclick="showGames(); return false;">Games</a>
+                <a href="#" onclick="showAbout(); return false;">About</a>
+            </div>
+            <div class="footer-section">
+                <h3>Legal</h3>
+                <a href="#">Terms & Conditions</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Disclaimer</a>
+            </div>
+            <div class="footer-section">
+                <h3>Support</h3>
+                <a href="#">Contact Us</a>
+                <a href="#">FAQ</a>
+                <a href="#">Responsible Gaming</a>
+            </div>
+            <div class="footer-section">
+                <h3>About</h3>
+                <p style="color: #b0b0b0; font-size: 14px;">100% Free-to-Play Entertainment Platform. Virtual coins have zero real money value.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let gameState = {
+            balance: 1000,
+            currentGame: null,
+            currentBet: 50,
+            currentPrediction: null,
+            chickenGameActive: false,
+            chickenBoxes: [],
+            chickenMultiplier: 1.0,
+            chickenEggsFound: 0
+        };
+
+        // Update balance display
+        function updateBalance() {
+            document.getElementById('balance').textContent = gameState.balance;
+            document.getElementById('dice-balance-display').textContent = gameState.balance;
+        }
+
+        // Navigation
+        function showHome() {
+            document.querySelectorAll('.game-screen').forEach(el => el.classList.remove('active'));
+            document.getElementById('home-screen').classList.add('active');
+            gameState.currentGame = null;
+        }
+
+        function showGames() {
+            showHome();
+        }
+
+        function showAbout() {
+            alert('Social Casino - 100% Free Gaming Platform\n\nVirtual coins have NO real money value.\nAll games are for entertainment only.\nMust be 18+ to play.');
+        }
+
+        // Bet functions
+        function setBet(game, amount) {
+            const maxBalance = gameState.balance;
+            gameState.currentBet = Math.min(amount, maxBalance);
+            document.getElementById(game + '-bet').value = gameState.currentBet;
+        }
+
+        // ===== CHICKEN GAME =====
+        function playChicken() {
+            document.getElementById('home-screen').classList.remove('active');
+            document.getElementById('chicken-screen').classList.add('active');
+            gameState.currentGame = 'chicken';
+            initChickenGame();
+        }
+
+        function initChickenGame() {
+            gameState.chickenGameActive = false;
+            gameState.chickenMultiplier = 1.0;
+            gameState.chickenEggsFound = 0;
+            gameState.chickenBoxes = [];
+            
+            const grid = document.getElementById('chicken-grid');
+            grid.innerHTML = '';
+            
+            for (let i = 0; i < 25; i++) {
+                const box = document.createElement('div');
+                box.className = 'chicken-box';
+                box.textContent = '?';
+                box.dataset.index = i;
+                box.onclick = () => revealChickenBox(i);
+                grid.appendChild(box);
+                gameState.chickenBoxes.push({ index: i, revealed: false, isEgg: false });
+            }
+            
+            updateChickenDisplay();
+        }
+
+        function startChicken() {
+            if (gameState.chickenGameActive) {
+                alert('Game already in progress!');
+                return;
+            }
+
+            const bet = parseInt(document.getElementById('chicken-bet').value);
+            if (bet > gameState.balance) {
+                alert('Insufficient balance!');
+                return;
+            }
+
+            gameState.currentBet = bet;
+            gameState.balance -= bet;
+            gameState.chickenGameActive = true;
+            gameState.chickenMultiplier = 1.0;
+            gameState.chickenEggsFound = 0;
+
+            // Place eggs randomly
+            const difficulty = document.getElementById('chicken-difficulty').value;
+            const eggCount = difficulty === 'easy' ? 8 : difficulty === 'medium' ? 10 : 12;
+            const multiplierIncrease = difficulty === 'easy' ? 0.5 : difficulty === 'medium' ? 1.0 : 2.0;
+            
+            const eggIndices = new Set();
+            while (eggIndices.size < eggCount) {
+                eggIndices.add(Math.floor(Math.random() * 25));
+            }
+
+            gameState.chickenBoxes.forEach((box, i) => {
+                box.isEgg = eggIndices.has(i);
+                box.revealed = false;
+            });
+
+            document.querySelectorAll('.chicken-box').forEach(box => {
+                box.textContent = '?';
+                box.classList.remove('revealed');
+            });
+
+            updateChickenDisplay();
+        }
+
+        function revealChickenBox(index) {
+            if (!gameState.chickenGameActive || gameState.chickenBoxes[index].revealed) return;
+
+            const box = gameState.chickenBoxes[index];
+            box.revealed = true;
+
+            const boxEl = document.querySelector(`[data-index="${index}"]`);
+            boxEl.classList.add('revealed');
+
+            if (box.isEgg) {
+                boxEl.textContent = '🥚';
+                gameState.chickenEggsFound++;
+                gameState.chickenMultiplier += (document.getElementById('chicken-difficulty').value === 'easy' ? 0.5 : document.getElementById('chicken-difficulty').value === 'medium' ? 1.0 : 2.0);
+                updateChickenDisplay();
+            } else {
+                boxEl.textContent = '🦴';
+                gameState.chickenGameActive = false;
+                document.getElementById('chicken-result').textContent = '❌ GAME OVER! You hit a bone!';
+                document.getElementById('chicken-result').classList.add('show', 'loss');
+                updateBalance();
+            }
+        }
+
+        function cashoutChicken() {
+            if (!gameState.chickenGameActive) {
+                alert('Start a game first!');
+                return;
+            }
+
+            const winAmount = Math.floor(gameState.currentBet * gameState.chickenMultiplier);
+            gameState.balance += winAmount;
+            gameState.chickenGameActive = false;
+
+            document.getElementById('chicken-result').textContent = `✅ WIN! You earned ${winAmount} coins!`;
+            document.getElementById('chicken-result').classList.add('show', 'win');
+            updateChickenDisplay();
+            updateBalance();
+        }
+
+        function updateChickenDisplay() {
+            document.getElementById('chicken-multiplier').textContent = gameState.chickenMultiplier.toFixed(2) + 'x';
+            document.getElementById('chicken-eggs').textContent = gameState.chickenEggsFound;
+            document.getElementById('chicken-win').textContent = Math.floor(gameState.currentBet * gameState.chickenMultiplier);
+        }
+
+        // ===== DICE GAME =====
+        function playDice() {
+            document.getElementById('home-screen').classList.remove('active');
+            document.getElementById('dice-screen').classList.add('active');
+            gameState.currentGame = 'dice';
+            gameState.currentPrediction = null;
+            document.getElementById('dice-result').textContent = '?';
+            updateBalance();
+        }
+
+        function selectPrediction(prediction) {
+            gameState.currentPrediction = prediction;
+            document.querySelectorAll('.prediction-btn').forEach(btn => btn.classList.remove('selected'));
+            event.target.classList.add('selected');
+        }
+
+        function rollDice() {
+            if (!gameState.currentPrediction) {
+                alert('Please select HIGH or LOW!');
+                return;
+            }
+
+            const bet = parseInt(document.getElementById('dice-bet').value);
+            if (bet > gameState.balance) {
+                alert('Insufficient balance!');
+                return;
+            }
+
+            gameState.balance -= bet;
+            document.getElementById('dice-bet-display').textContent = bet;
+            updateBalance();
+
+            const diceEl = document.getElementById('dice-result');
+            diceEl.classList.add('rolling');
+
+            setTimeout(() => {
+                const result = Math.floor(Math.random() * 6) + 1;
+                diceEl.textContent = result;
+                diceEl.classList.remove('rolling');
+
+                const isHigh = result >= 4;
+                const isWin = (gameState.currentPrediction === 'high' && isHigh) || (gameState.currentPrediction === 'low' && !isHigh);
+
+                if (isWin) {
+                    const winAmount = bet * 2;
+                    gameState.balance += winAmount;
+                    document.getElementById('dice-result-msg').textContent = `✅ WIN! You earned ${winAmount} coins!`;
+                    document.getElementById('dice-result-msg').classList.add('show', 'win');
+                } else {
+                    document.getElementById('dice-result-msg').textContent = `❌ LOSS! Better luck next time!`;
+                    document.getElementById('dice-result-msg').classList.add('show', 'loss');
+                }
+
+                updateBalance();
+            }, 600);
+        }
+
+        // Initialize
+        updateBalance();
+    </script>
+</body>
+</html>

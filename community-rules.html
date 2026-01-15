@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Rules - Social Casino</title>
+    <meta name="description" content="Read our community rules and guidelines for our social casino platform.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #D4AF37;
+            --primary-dark: #1a1a3e;
+            --primary-light: #f5f5f5;
+            --text-dark: #333333;
+            --text-light: #ffffff;
+            --border-color: #e0e0e0;
+            --radius: 12px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--primary-light);
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        h1 { font-size: 3rem; }
+        h2 { font-size: 2.5rem; }
+        h3 { font-size: 2rem; }
+
+        nav {
+            background-color: var(--primary-dark);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--primary-dark);
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .btn-primary:hover {
+            background-color: #e0c547;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, #2d2d5f 100%);
+            color: var(--text-light);
+            padding: 3rem 0;
+            margin-bottom: 3rem;
+        }
+
+        .page-header h1 {
+            color: var(--primary);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .page-content {
+            min-height: calc(100vh - 200px);
+            padding: 3rem 0;
+        }
+
+        .content-section {
+            margin-bottom: 3rem;
+        }
+
+        .content-section h2 {
+            color: var(--primary-dark);
+            margin-bottom: 1.5rem;
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 1rem;
+        }
+
+        .content-section h3 {
+            color: var(--primary-dark);
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .content-section p {
+            color: #555;
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+
+        .content-section ul, .content-section ol {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+            color: #555;
+        }
+
+        .content-section li {
+            margin-bottom: 0.5rem;
+            line-height: 1.8;
+        }
+
+        .highlight-box {
+            background-color: rgba(212, 175, 55, 0.1);
+            border-left: 4px solid var(--primary);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: var(--radius);
+        }
+
+        footer {
+            background-color: var(--primary-dark);
+            color: var(--text-light);
+            padding: 3rem 0 1rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h4 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary);
+        }
+
+        .footer-disclaimer {
+            background-color: rgba(212, 175, 55, 0.1);
+            border-top: 2px solid var(--primary);
+            padding: 1.5rem;
+            margin-top: 2rem;
+            border-radius: var(--radius);
+            font-size: 0.9rem;
+            line-height: 1.8;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.75rem; }
+            h3 { font-size: 1.5rem; }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">CASINO</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html">Games</a></li>
+                <li><a href="index.html">How It Works</a></li>
+                <li><a href="index.html">About</a></li>
+                <li><a href="index.html">Contact</a></li>
+                <li><button class="btn-primary" onclick="alert('Play Now feature coming soon!')">Play Now</button></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="page-header">
+        <div class="container">
+            <h1>Community Rules</h1>
+            <p>Guidelines for a Positive Gaming Experience</p>
+        </div>
+    </div>
+
+    <div class="page-content">
+        <div class="container">
+            <div class="highlight-box">
+                <strong>Welcome to Our Community!</strong> We're committed to maintaining a respectful, safe, and enjoyable environment for all players. Please read and follow these community rules.
+            </div>
+
+            <div class="content-section">
+                <h2>1. Respectful Conduct</h2>
+                <p>All users must treat other players and staff with respect. Harassment, bullying, or abusive behavior is strictly prohibited. This includes:</p>
+                <ul>
+                    <li>Personal attacks or insults</li>
+                    <li>Hate speech or discriminatory language</li>
+                    <li>Threats or intimidation</li>
+                    <li>Sexual harassment or inappropriate behavior</li>
+                </ul>
+            </div>
+
+            <div class="content-section">
+                <h2>2. Prohibited Activities</h2>
+                <p>The following activities are strictly prohibited:</p>
+                <ul>
+                    <li>Cheating or exploiting game mechanics</li>
+                    <li>Using bots or automated tools</li>
+                    <li>Attempting to circumvent security measures</li>
+                    <li>Sharing account credentials with others</li>
+                    <li>Impersonating other users or staff members</li>
+                    <li>Spamming or excessive messaging</li>
+                    <li>Posting offensive, inappropriate, or illegal content</li>
+                    <li>Attempting to access unauthorized areas of the platform</li>
+                    <li>Distributing malware or harmful software</li>
+                </ul>
+            </div>
+
+            <div class="content-section">
+                <h2>3. Account Security</h2>
+                <p>Users are responsible for maintaining the confidentiality of their account credentials. We recommend:</p>
+                <ul>
+                    <li>Creating a strong, unique password</li>
+                    <li>Never sharing your password with anyone</li>
+                    <li>Logging out after each session</li>
+                    <li>Reporting unauthorized access immediately</li>
+                    <li>Enabling two-factor authentication if available</li>
+                </ul>
+            </div>
+
+            <div class="content-section">
+                <h2>4. Fair Play Commitment</h2>
+                <p>All games use certified random number generators to ensure fair outcomes. Any attempt to manipulate game results or exploit vulnerabilities will result in account suspension or termination.</p>
+            </div>
+
+            <div class="content-section">
+                <h2>5. Consequences for Violations</h2>
+                <p>Violations of these community rules may result in:</p>
+                <ul>
+                    <li><strong>Warning:</strong> First minor violation</li>
+                    <li><strong>Temporary Suspension:</strong> Repeated violations or serious misconduct (1-7 days)</li>
+                    <li><strong>Extended Suspension:</strong> Severe violations (7-30 days)</li>
+                    <li><strong>Permanent Termination:</strong> Extreme violations or repeated serious offenses</li>
+                    <li><strong>Forfeiture of Virtual Coins:</strong> In cases of cheating or fraud</li>
+                </ul>
+            </div>
+
+            <div class="content-section">
+                <h2>6. Reporting Violations</h2>
+                <p>If you witness a violation of these community rules, please report it immediately to our support team:</p>
+                <p><strong>Email:</strong> support@example.com<br>
+                <strong>Include:</strong> Username of violator, description of violation, date/time, and any evidence</p>
+                <p>We take all reports seriously and will investigate promptly.</p>
+            </div>
+
+            <div class="content-section">
+                <h2>7. Content Guidelines</h2>
+                <p>When posting in community areas, ensure your content:</p>
+                <ul>
+                    <li>Is appropriate for all ages</li>
+                    <li>Does not contain hate speech or discrimination</li>
+                    <li>Does not promote illegal activities</li>
+                    <li>Does not spam or advertise external services</li>
+                    <li>Respects intellectual property rights</li>
+                    <li>Does not contain personal information of others</li>
+                </ul>
+            </div>
+
+            <div class="content-section">
+                <h2>8. Amendments to Rules</h2>
+                <p>We reserve the right to modify these community rules at any time. Changes will be posted on our website with an updated date. Continued use of our platform constitutes acceptance of updated rules.</p>
+            </div>
+
+            <div class="content-section">
+                <h2>9. Appeals Process</h2>
+                <p>If you believe your account was suspended or terminated unfairly, you may appeal:</p>
+                <ul>
+                    <li>Submit an appeal within 30 days of the action</li>
+                    <li>Include your username and detailed explanation</li>
+                    <li>Send to: support@example.com with subject "Account Appeal"</li>
+                    <li>Our team will review and respond within 7 business days</li>
+                </ul>
+            </div>
+
+            <div class="content-section">
+                <h2>10. Questions or Concerns</h2>
+                <p>If you have questions about these community rules, please contact us:</p>
+                <p><strong>Email:</strong> support@example.com<br>
+                <strong>Address:</strong> C/O N K SHARMA, SEC 9 TYPE, BT QR NO 463, HEC, Dhurwa, Ranchi - 834004, Jharkhand, India</p>
+            </div>
+
+            <div class="highlight-box" style="margin-top: 3rem;">
+                <strong>Thank You!</strong> By following these community rules, you help us maintain a safe, respectful, and enjoyable gaming environment for everyone. We appreciate your cooperation and commitment to our community.
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="index.html">Games</a></li>
+                        <li><a href="index.html">How It Works</a></li>
+                        <li><a href="index.html">About Us</a></li>
+                        <li><a href="index.html">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="terms.html">Terms & Conditions</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="disclaimer.html">Disclaimer</a></li>
+                        <li><a href="community-rules.html">Community Rules</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="index.html">Responsible Play</a></li>
+                        <li><a href="mailto:support@example.com">Email Support</a></li>
+                        <li><a href="index.html">Contact Us</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <ul>
+                        <li>CC INNOVATIONS (OPC) PRIVATE LIMITED</li>
+                        <li>CIN: U78100JH2023OPC021360</li>
+                        <li>GST: 20AALCC3673P1ZB</li>
+                        <li><a href="mailto:support@example.com">support@example.com</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-disclaimer">
+                <strong>Age & Responsible Gaming Disclaimer:</strong> The content on this site is intended for users who are 18 years of age or older. It operates as a social gaming platform featuring free-to-play experiences available for entertainment and fun. This is a safe environment with no real money involved. No real currency can be used or gained during gameplay. We promote responsible gaming and fair play. All achievements are for entertainment purposes only and do not translate into any real-world financial activities.
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 Social Casino. All rights reserved. | Operated by CC INNOVATIONS (OPC) PRIVATE LIMITED | CIN: U78100JH2023OPC021360</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
